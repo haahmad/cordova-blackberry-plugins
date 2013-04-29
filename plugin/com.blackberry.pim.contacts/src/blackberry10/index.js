@@ -33,12 +33,12 @@ function checkPermission(pluginResult) {
 }
 
 function onChildCardClosed(cb) {
-    var application = window.qnx.webplatform.getApplication(),
+    var application = window.wp.getApplication(),
         result = {},
         kindAttributeMap = contactConsts.getKindAttributeMap(),
         subKindAttributeMap = contactConsts.getSubKindAttributeMap(),
         callback = function (info) {
-            application.invocation.removeEventListener("childCardClosed", callback);
+            wp.core.invocation.un("childCardClosed", callback);
 
             if (info.reason === "cancel") {
                 cb(undefined, "cancel");
@@ -77,7 +77,7 @@ function onChildCardClosed(cb) {
             }
         };
 
-    application.invocation.addEventListener("childCardClosed", callback);
+    wp.core.invocation.on("childCardClosed", callback);
 }
 
 function getAccountFilters(options) {
@@ -311,7 +311,7 @@ module.exports = {
             pluginResult.ok(result.accounts, false);
         } else {
             pluginResult.error("Failed to get accounts", false);
-        }        
+        }
     }
 };
 
@@ -320,7 +320,7 @@ module.exports = {
 ///////////////////////////////////////////////////////////////////
 
 JNEXT.PimContacts = function ()
-{   
+{
     var self = this,
         hasInstance = false;
 
@@ -392,20 +392,20 @@ JNEXT.PimContacts = function ()
         }
 
         self.m_id = JNEXT.createObject("libpimcontacts.PimContacts");
-        
+
         if (self.m_id === "") {
             return false;
         }
 
         JNEXT.registerEvents(self);
     };
-   
+
     self.onEvent = function (strData) {
         var arData = strData.split(" "),
             strEventDesc = arData[0],
             eventHandler,
             args = {};
-            
+
         if (strEventDesc === "result") {
             args.result = escape(strData.split(" ").slice(2).join(" "));
             eventHandler = self.eventHandlers[arData[1]];
@@ -420,7 +420,7 @@ JNEXT.PimContacts = function ()
 
         }
     };
-    
+
     self.m_id = "";
     self.eventHandlers = {};
 

@@ -17,6 +17,7 @@
 var LIB_FOLDER = "../../lib/",
     contextmenu,
     _overlayWebView,
+    _event = require(LIB_FOLDER + 'event'),
     _utils = require(LIB_FOLDER + 'utils');
 
 function enabled(success, fail, args, env) {
@@ -25,7 +26,7 @@ function enabled(success, fail, args, env) {
     if (typeof args.enabled !== 'undefined') {
         _enabled = JSON.parse(decodeURIComponent(args.enabled));
         if (typeof(_enabled) === 'boolean') {
-            _overlayWebView.contextMenu.enabled = _enabled;
+            wp.ui.contextMenu.enabled = _enabled;
         }
         result.ok(true, false);
     } else {
@@ -94,7 +95,7 @@ contextmenu = {
     defineCustomContext: defineCustomContext
 };
 
-qnx.webplatform.getController().addEventListener('ui.init', function () {
+wp.getController().on('ui.init', function () {
     _overlayWebView = require(LIB_FOLDER + 'overlayWebView');
 });
 
